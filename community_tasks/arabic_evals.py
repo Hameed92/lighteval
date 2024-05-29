@@ -233,6 +233,7 @@ class CustomAlGhafaNativeTask(LightevalTaskConfig):
             stop_sequence=None,
             output_regex=None,
             frozen=False,
+            trust_dataset=True,
             version=0,
         )
 
