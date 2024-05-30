@@ -48,7 +48,7 @@ CACHE_DIR = os.getenv("HF_HOME")
 if is_accelerate_available():
     from accelerate import Accelerator, InitProcessGroupKwargs
 
-    accelerator = Accelerator(kwargs_handlers=[InitProcessGroupKwargs(timeout=timedelta(seconds=3000))])
+    accelerator = Accelerator(kwargs_handlers=[InitProcessGroupKwargs(timeout=timedelta(seconds=30000))])
 else:
     accelerator = None
 
