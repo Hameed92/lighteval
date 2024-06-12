@@ -26,7 +26,7 @@ import json
 import re
 import time
 from typing import Optional
-
+import requests
 from openai import OpenAI
 
 from lighteval.logging.hierarchical_logger import hlog_warn
@@ -124,18 +124,23 @@ class JudgeOpenAI:
             )
             prompts.append(prompts_multi_turn)
 
+        headers = {'api-key': "94f5a40f5569458cb9a42896abbe6b61", 'Content-Type': 'application/json'}
+        url = 'https://allam-swn-gpt-01.openai.azure.com/openai/deployments/gpt-4-900ptu/chat/completions?api-version=2023-03-15-preview'
+    
         responses = []
         for prompt in prompts:
             for _ in range(self.API_MAX_RETRY):
                 try:
-                    response = self.client.chat.completions.create(
-                        model=self.model,
-                        seed=self.seed,
-                        temperature=self.temperature,
-                        messages=prompt,
-                        max_tokens=self.max_tokens,
-                        n=1,
-                    )
+                    payload = payload = {"temperature": self.temperature, "messages": prompts}
+                    response = requests.post(url=url, headers=headers, json=payload)
+                    # response = self.client.chat.completions.create(
+                    #     model=self.model,
+                    #     seed=self.seed,
+                    #     temperature=self.temperature,
+                    #     messages=prompt,
+                    #     max_tokens=self.max_tokens,
+                    #     n=1,
+                    # )
                     responses.append(response)
                     break
                 except Exception as e:
