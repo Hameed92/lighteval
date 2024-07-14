@@ -23,6 +23,7 @@
 
 import ast
 import json
+import os
 import re
 import time
 from typing import Optional
@@ -123,15 +124,16 @@ class JudgeOpenAI:
                 questions, answers, references if len(references) > 1 else None
             )
             prompts.append(prompts_multi_turn)
-
-        headers = {'api-key': "94f5a40f5569458cb9a42896abbe6b61", 'Content-Type': 'application/json'}
-        url = 'https://allam-swn-gpt-01.openai.azure.com/openai/deployments/gpt-4-900ptu/chat/completions?api-version=2023-03-15-preview'
+        openai_key = os.environ.get("OPENAI_KEY", None)
+        openai_url = os.environ.get("OPENAI_URL", None)
+        headers = {'api-key': openai_key, 'Content-Type': 'application/json'}
+        url = openai_url
     
         responses = []
         for prompt in prompts:
             for _ in range(self.API_MAX_RETRY):
                 try:
-                    payload = payload = {"temperature": self.temperature, "messages": prompts}
+                    payload = payload = {"temperature": self.temperature, "messages": prompt}
                     response = requests.post(url=url, headers=headers, json=payload)
                     # response = self.client.chat.completions.create(
                     #     model=self.model,

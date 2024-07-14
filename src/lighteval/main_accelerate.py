@@ -98,6 +98,8 @@ def main(args):
                 use_chat_template=args.use_chat_template,
                 system_prompt=args.system_prompt,
             )
+            print('req ==========', requests)
+            print('docs =========', docs)
 
     with htrack_block("Setting seeds and waiting for all processes"):
         hlog(f"setting seed to {1234} for random and numpy")

@@ -651,7 +651,7 @@ class JudgeLLM:
         return scores for turn 1 and 2. Also returns user_prompt and judgment
         which are ignored later by the aggregator.
         """
-
+        # print(formatted_doc)
         # If we are evaluating a multiturn task, we need to have specific field in the formatted doc
         if self.multi_turn:
             questions = formatted_doc.specific["multi_turn_queries"]
