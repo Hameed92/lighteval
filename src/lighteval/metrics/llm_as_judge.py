@@ -151,9 +151,12 @@ class JudgeOpenAI:
 
         if len(responses) == 0:
             raise Exception("Failed to get response from the API")
+        try:
 
-        judgments = [response.choices[0].message.content for response in responses]
-        scores = [self.__process_judge_response(judgment) for judgment in judgments]
+            judgments = [response.choices[0].message.content for response in responses]
+            scores = [self.__process_judge_response(judgment) for judgment in judgments]
+        except:
+            print('-----------', response.text)
 
         return scores, prompts, judgments
 
