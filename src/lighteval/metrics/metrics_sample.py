@@ -44,6 +44,8 @@ from lighteval.metrics.llm_as_judge import JudgeOpenAI
 from lighteval.metrics.normalizations import remove_braces, remove_braces_and_strip
 from lighteval.tasks.requests import Doc
 from lighteval.utils import as_list
+import pandas as pd
+import csv
 
 
 class ExactMatches:
@@ -653,7 +655,7 @@ class JudgeLLM:
         """
         # print(formatted_doc)
         # If we are evaluating a multiturn task, we need to have specific field in the formatted doc
-        print('haaaaaaaail marryyy ==============================', formatted_doc.specific.keys())
+        # print('haaaaaaaail marryyy ==============================', formatted_doc.specific.keys())
         if self.multi_turn:
             questions = formatted_doc.specific["multi_turn_queries"]
             ref_answers = formatted_doc.specific.get("reference", None) if formatted_doc.specific is not None else None
@@ -662,8 +664,14 @@ class JudgeLLM:
             ref_answers = [formatted_doc.choices[formatted_doc.gold_index]]
 
         scores, messages, judgements = self.judge.evaluate_answer(questions, predictions, ref_answers)
-        # print('================ messages', messages)
-        # Multi turn only has 2 turns
+        catigories = formatted_doc.specific['category']
+        print('====scores:====', len(scores))
+        print('====questions=====', len(questions))
+        print('=====categories====', len(catigories))
+        try:
+            pd.DataFrame(data={'questions': questions, 'categories': catigories, 'scores': scores}).to_csv('results_with_cat.csv', index=False)
+        except:
+            print('+++++++++ couldn\'t save df :(')
         if self.multi_turn:
             return {
                 "single_turn": scores[0],
