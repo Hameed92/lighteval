@@ -661,7 +661,7 @@ class JudgeLLM:
             ref_answers = [formatted_doc.choices[formatted_doc.gold_index]]
 
         scores, messages, judgements = self.judge.evaluate_answer(questions, predictions, ref_answers)
-
+        print('================ messages', messages)
         # Multi turn only has 2 turns
         if self.multi_turn:
             return {

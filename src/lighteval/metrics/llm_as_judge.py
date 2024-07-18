@@ -157,6 +157,8 @@ class JudgeOpenAI:
             scores = [self.__process_judge_response(judgment) for judgment in judgments]
         except:
             print('-----------response text', response.text)
+            scores = "none"
+            judgments = "none"
 
         return scores, prompts, judgments
 
