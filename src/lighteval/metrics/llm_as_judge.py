@@ -156,7 +156,7 @@ class JudgeOpenAI:
             judgments = [response.json()['choices'][0]['message']['content'] for response in responses]
             scores = [self.__process_judge_response(judgment) for judgment in judgments]
         except:
-            print('-----------response text', response.text)
+            # print('-----------response text', response.text)
             scores = "none"
             judgments = "none"
 

@@ -653,6 +653,7 @@ class JudgeLLM:
         """
         # print(formatted_doc)
         # If we are evaluating a multiturn task, we need to have specific field in the formatted doc
+        print('haaaaaaaail marryyy ==============================', formatted_doc.specific.keys())
         if self.multi_turn:
             questions = formatted_doc.specific["multi_turn_queries"]
             ref_answers = formatted_doc.specific.get("reference", None) if formatted_doc.specific is not None else None
@@ -661,7 +662,7 @@ class JudgeLLM:
             ref_answers = [formatted_doc.choices[formatted_doc.gold_index]]
 
         scores, messages, judgements = self.judge.evaluate_answer(questions, predictions, ref_answers)
-        print('================ messages', messages)
+        # print('================ messages', messages)
         # Multi turn only has 2 turns
         if self.multi_turn:
             return {
