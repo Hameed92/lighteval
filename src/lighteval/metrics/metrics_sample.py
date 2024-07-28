@@ -668,10 +668,10 @@ class JudgeLLM:
         print('====scores:====', len(scores))
         print('====questions=====', len(questions))
         print('=====categories====', len(catigories))
-        try:
-            pd.DataFrame(data={'questions': questions, 'categories': catigories, 'scores': scores}).to_csv('results_with_cat.csv', index=False)
-        except:
-            print('+++++++++ couldn\'t save df :(')
+        # try:
+        #     pd.DataFrame(data={'questions': questions, 'categories': catigories, 'scores': scores}).to_csv('results_with_cat.csv', index=False)
+        # except:
+        #     print('+++++++++ couldn\'t save df :(')
         if self.multi_turn:
             return {
                 "single_turn": scores[0],
