@@ -639,7 +639,7 @@ class JudgeLLM:
                 seed=42,
                 temperature=0.0,
                 templates_path=template_path,
-                openai_api_key=OPENAI_API_KEY,
+                openai_api_key='1111',
                 multi_turn=multi_turn,
             )
         except Exception as e:
