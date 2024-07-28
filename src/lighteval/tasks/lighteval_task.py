@@ -581,7 +581,7 @@ class LightevalTask:
                 results=results, formatted_doc=formatted_doc, metrics=self.metrics
             )
             outputs.update(cur_outputs)
-        print('outputs from process_results =============', outputs.keys(), "+++", outputs)
+        # print('outputs from process_results =============', outputs.keys(), "+++", outputs)
         return outputs
 
     def aggregation(self):

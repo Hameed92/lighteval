@@ -156,8 +156,8 @@ class JudgeOpenAI:
             judgments = [response.json()['choices'][0]['message']['content'] for response in responses]
             scores = [self.__process_judge_response(judgment) for judgment in judgments]
         except:
-            print('-----------response text, openai call failed ++++++++++++++++++++', response.text)
-            scores = 0
+            print('-----------response text, openai call failed ++++++++++++++++++++')
+            scores = '0'
             judgments = "none"
 
         return scores, prompts, judgments
