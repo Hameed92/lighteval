@@ -375,20 +375,20 @@ class BaseModel(LightevalModel):
                     ],
                 ]
             )
-            model_outputs = self.model.generate(
-                **model_inputs,
-                max_new_tokens=max_generated_tokens,
-                stopping_criteria=stopping_criteria,
-                do_sample=False,
-                pad_token_id=self.tokenizer.pad_token_id
-                if self.tokenizer.pad_token_id
-                else self.tokenizer.eos_token_id,
-            )
-            model_outputs = model_outputs[0, model_inputs["input_ids"].size(1) :]
-            model_generations = [model_outputs]
-            decoded_generation = self.tokenizer.decode(model_outputs)
-            for term in stop_tokens:
-                decoded_generation = decoded_generation.split(term)[0]
+            # model_outputs = self.model.generate(
+            #     **model_inputs,
+            #     max_new_tokens=max_generated_tokens,
+            #     stopping_criteria=stopping_criteria,
+            #     do_sample=False,
+            #     pad_token_id=self.tokenizer.pad_token_id
+            #     if self.tokenizer.pad_token_id
+            #     else self.tokenizer.eos_token_id,
+            # )
+            # model_outputs = model_outputs[0, model_inputs["input_ids"].size(1) :]
+            model_generations = ['hello']
+            decoded_generation = 'hello'#self.tokenizer.decode(model_outputs)
+            # for term in stop_tokens:
+            #     decoded_generation = decoded_generation.split(term)[0]
 
             input_tokens = [model_inputs["input_ids"]]
 
@@ -415,38 +415,38 @@ class BaseModel(LightevalModel):
                     ]
                 )
 
-                model_outputs = self.model.generate(
-                    input_ids=model_inputs["input_ids"],
-                    attention_mask=model_inputs["attention_mask"],
-                    max_new_tokens=max_generated_tokens,
-                    stopping_criteria=stopping_criteria,
-                    do_sample=False,
-                    pad_token_id=self.tokenizer.pad_token_id
-                    if self.tokenizer.pad_token_id
-                    else self.tokenizer.eos_token_id,
-                )
-                model_outputs = model_outputs[0, model_inputs["input_ids"].size(1) :]
-                model_generations.append(model_outputs)
-                decoded_generation = self.tokenizer.decode(model_outputs, skip_special_tokens=True)
-                input_tokens.append(model_inputs["input_ids"])
+                # model_outputs = self.model.generate(
+                #     input_ids=model_inputs["input_ids"],
+                #     attention_mask=model_inputs["attention_mask"],
+                #     max_new_tokens=max_generated_tokens,
+                #     stopping_criteria=stopping_criteria,
+                #     do_sample=False,
+                #     pad_token_id=self.tokenizer.pad_token_id
+                #     if self.tokenizer.pad_token_id
+                #     else self.tokenizer.eos_token_id,
+                # )
+                # model_outputs = model_outputs[0, model_inputs["input_ids"].size(1) :]
+                model_generations.append('hello2')
+                decoded_generation = 'hello'
+                # input_tokens.append(model_inputs["input_ids"])
 
-                for term in stop_tokens:
-                    decoded_generation = decoded_generation.split(term)[0]
+                # for term in stop_tokens:
+                #     decoded_generation = decoded_generation.split(term)[0]
 
-            if self.accelerator:
-                padding_size = max(gen.shape[0] for gen in model_generations)
-                for i, gen in enumerate(model_generations):
-                    model_generations[i] = F.pad(
-                        gen, (0, padding_size - gen.shape[0]), value=self.tokenizer.pad_token_id
-                    )
-                model_generations = torch.stack(model_generations, dim=0)
-                model_generations, lengths = self.pad_and_gather(model_generations, drop_last_samples=False)
+            # if self.accelerator:
+            #     padding_size = max(gen.shape[0] for gen in model_generations)
+            #     for i, gen in enumerate(model_generations):
+            #         model_generations[i] = F.pad(
+            #             gen, (0, padding_size - gen.shape[0]), value=self.tokenizer.pad_token_id
+            #         )
+                # model_generations = torch.stack(model_generations, dim=0)
+                # model_generations, lengths = self.pad_and_gather(model_generations, drop_last_samples=False)
 
             model_answers = []
-            for generation, _ in zip(model_generations, lengths):
-                generation = generation.cpu().tolist()
-                decoded = self.tokenizer.decode(generation, skip_special_tokens=True)
-                model_answers.append(decoded)
+            for generation in model_generations:
+                # generation = generation.cpu().tolist()
+                # decoded = self.tokenizer.decode(generation, skip_special_tokens=True)
+                model_answers.append(generation)
 
             for answers in batched(model_answers, len(request.context)):
                 results.append(

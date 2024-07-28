@@ -157,8 +157,8 @@ class JudgeOpenAI:
             scores = [self.__process_judge_response(judgment) for judgment in judgments]
         except:
             print('-----------response text, openai call failed ++++++++++++++++++++')
-            scores = '0'
-            judgments = "none"
+            scores = ['0', '0']
+            judgments = ["none", 'none']
 
         return scores, prompts, judgments
 
