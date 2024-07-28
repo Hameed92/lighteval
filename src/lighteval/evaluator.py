@@ -133,7 +133,7 @@ def evaluate(  # noqa: C901
         evaluation_tracker.details_logger.log(task_example_id.task_name, task, doc, model_responses, metrics)
     try:
         print('single turns', len(single_turns), 'judgements_1 len:', len(judgements_1), 'user prompts 1 len:', len(user_prompts_1))
-        pd.DataFrame(data={'questions': doc['question'], 'categories': doc['category'], 'single_turns': single_turns, 'multi_turns': multi_turns, 'user_prompts_1': user_prompts_1, 'user_prompts_2': user_prompts_2, 'judgements_1': judgements_1, 'judgements_2': judgements_2}).to_csv('results_with_cat.csv', index=False)
+        pd.DataFrame(data={'questions': doc['specific']['multi_turn_queries'], 'categories': doc['specific']['category'], 'single_turns': single_turns, 'multi_turns': multi_turns, 'user_prompts_1': user_prompts_1, 'user_prompts_2': user_prompts_2, 'judgements_1': judgements_1, 'judgements_2': judgements_2}).to_csv('results_with_cat.csv', index=False)
     except:
         print('+++++++++ couldn\'t save df :(')
 
