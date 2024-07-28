@@ -105,6 +105,7 @@ def evaluate(  # noqa: C901
     judgements_1 = []
     judgements_2 = []
     categories = []
+    questions = []
     for task_example_id, prediction_list in example_id_response_dict.items():
         # ===== Unpack the request =====
         prediction_list.sort(
@@ -122,7 +123,7 @@ def evaluate(  # noqa: C901
         # using a deep copy here because process results pops from the model responses
         metrics = task.process_results(doc, copy.deepcopy(model_responses))
 
-        
+        questions.append(doc.specific['multi_turn_queries'])
         single_turns.append(metrics['single_turn'])
         multi_turns.append(metrics['multi_turn'])
         user_prompts_1.append(metrics['user_prompt'][0])
