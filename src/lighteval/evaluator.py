@@ -106,6 +106,8 @@ def evaluate(  # noqa: C901
     judgements_2 = []
     categories = []
     questions = []
+    categories = []
+    questions = []
     for task_example_id, prediction_list in example_id_response_dict.items():
         # ===== Unpack the request =====
         prediction_list.sort(
