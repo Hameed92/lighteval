@@ -137,8 +137,8 @@ def evaluate(  # noqa: C901
         evaluation_tracker.metrics_logger.log(task_example_id.task_name, metrics)
         evaluation_tracker.details_logger.log(task_example_id.task_name, task, doc, model_responses, metrics)
     try:
-        print('single turns', len(single_turns), 'judgements_1 len:', len(judgements_1), 'user prompts 1 len:', len(user_prompts_1), 'categories len', len(categories), 'questions len:', len(doc.specific['multi_turn_queries']))
-        pd.DataFrame(data={'questions': doc.specific['multi_turn_queries'], 'single_turns': single_turns, 'multi_turns': multi_turns, 'categories': categories, 'single_turns': single_turns, 'multi_turns': multi_turns, 'user_prompts_1': user_prompts_1, 'user_prompts_2': user_prompts_2, 'judgements_1': judgements_1, 'judgements_2': judgements_2}).to_csv('results_with_cat.csv', index=False)
+        print('single turns', len(single_turns), 'judgements_1 len:', len(judgements_1), 'user prompts 1 len:', len(user_prompts_1), 'categories len', len(categories), 'questions len:', len(questions))
+        pd.DataFrame(data={'questions': questions, 'single_turns': single_turns, 'multi_turns': multi_turns, 'categories': categories, 'single_turns': single_turns, 'multi_turns': multi_turns, 'user_prompts_1': user_prompts_1, 'user_prompts_2': user_prompts_2, 'judgements_1': judgements_1, 'judgements_2': judgements_2}).to_csv('results_with_cat.csv', index=False)
     except Exception as e:
         print('+++++++++ couldn\'t save df:', str(e))
 
