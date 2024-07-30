@@ -155,10 +155,12 @@ class JudgeOpenAI:
 
             judgments = [response.json()['choices'][0]['message']['content'] for response in responses]
             scores = [self.__process_judge_response(judgment) for judgment in judgments]
-        except:
-            print('-----------response text, openai call failed ++++++++++++++++++++')
-            scores = ['0', '0']
-            judgments = ["none", 'none']
+            print('this is judgement from llmas judge: ', judgments, len(judgments), type(judgments))
+            print('thid is scores from llm as judge: ', scores, len(scores), type(scores))
+        except Exception as e:
+            print('-----------response text, openai call failed ++++++++++++++++++++', str(e))
+            scores = ['1', '1']
+            judgments = ["none [[1]]", 'none [[1]]']
 
         return scores, prompts, judgments
 
