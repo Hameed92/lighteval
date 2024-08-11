@@ -160,7 +160,7 @@ class JudgeOpenAI:
         except Exception as e:
             print('-----------response text, openai call failed ++++++++++++++++++++', str(e))
             scores = ['1', '1']
-            judgments = ["none [[1]]", 'none [[1]]']
+            judgments = ["none [[-1]]", 'none [[-1]]']
 
         return scores, prompts, judgments
 

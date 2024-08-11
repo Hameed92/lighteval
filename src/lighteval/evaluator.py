@@ -108,6 +108,7 @@ def evaluate(  # noqa: C901
     questions = []
     categories = []
     questions = []
+    question_ids = []
     for task_example_id, prediction_list in example_id_response_dict.items():
         # ===== Unpack the request =====
         prediction_list.sort(
@@ -133,12 +134,13 @@ def evaluate(  # noqa: C901
         judgements_1.append(metrics['judgement'][0])
         judgements_2.append(metrics['judgement'][1])
         categories.append(doc.specific['category'])
+        question_ids.append(doc.specific['id'])
 
         evaluation_tracker.metrics_logger.log(task_example_id.task_name, metrics)
         evaluation_tracker.details_logger.log(task_example_id.task_name, task, doc, model_responses, metrics)
     try:
         print('single turns', len(single_turns), 'judgements_1 len:', len(judgements_1), 'user prompts 1 len:', len(user_prompts_1), 'categories len', len(categories), 'questions len:', len(questions))
-        pd.DataFrame(data={'questions': questions, 'single_turns': single_turns, 'multi_turns': multi_turns, 'categories': categories, 'single_turns': single_turns, 'multi_turns': multi_turns, 'user_prompts_1': user_prompts_1, 'user_prompts_2': user_prompts_2, 'judgements_1': judgements_1, 'judgements_2': judgements_2}).to_csv('results_with_cat.csv', index=False)
+        pd.DataFrame(data={'question_id': question_ids, 'question': questions, 'single_turns': single_turns, 'multi_turns': multi_turns, 'categories': categories, 'user_prompts_1': user_prompts_1, 'user_prompts_2': user_prompts_2, 'judgements_1': judgements_1, 'judgements_2': judgements_2}).to_csv('results_with_cat.csv', index=False)
     except Exception as e:
         print('+++++++++ couldn\'t save df:', str(e))
 
