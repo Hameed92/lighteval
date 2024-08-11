@@ -154,7 +154,7 @@ class JudgeOpenAI:
                     print('-----------response text, openai call failed ++++++++++++++++++++', response.text)
                     if i == self.API_MAX_RETRY - 1:
                         scores.append(-1)
-                        judgment.append("fail") 
+                        judgments.append("fail") 
                     hlog_warn(f"{type(e), e}")
                     time.sleep(self.API_RETRY_SLEEP)
 
