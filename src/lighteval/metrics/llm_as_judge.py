@@ -29,7 +29,7 @@ import time
 from typing import Optional
 import requests
 from openai import OpenAI
-
+import anthropic
 from lighteval.logging.hierarchical_logger import hlog_warn
 
 
@@ -152,11 +152,21 @@ class JudgeOpenAI:
                     break
                 except Exception as e:
                     print('-----------response text, openai call failed ++++++++++++++++++++', response.text)
-                    if i == self.API_MAX_RETRY - 1:
-                        scores.append(-1)
-                        judgments.append("fail") 
                     hlog_warn(f"{type(e), e}")
                     time.sleep(self.API_RETRY_SLEEP)
+                    anthropic_key = os.environ.get("ANTHROPIC_KEY", None)
+                    client = anthropic.Anthropic(api_key=anthropic_key)
+                    try:
+                        judgment = client.messages.create(model="claude-3-5-sonnet-20240620", system="You are a helpful assistant.", messages=[prompt], max_tokens=1000).to_dict()['content'][0]['text']
+                        judgments.append(judgment)
+                        scores.append(self.__process_judge_response(judgment))
+                        break
+                        
+                    except:
+                        if i >= self.API_MAX_RETRY - 1:
+                            print('claude failed too')
+                            scores.append(0)
+                            judgments.append('fail')
 
         # try:
 
