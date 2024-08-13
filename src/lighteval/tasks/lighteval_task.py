@@ -108,7 +108,7 @@ class LightevalTaskConfig:
     original_num_docs: int = -1
     effective_num_docs: int = -1
 
-    trust_dataset: bool = None
+    trust_dataset: bool = True
 
     must_remove_duplicate_docs: bool = None
 
