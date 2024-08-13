@@ -665,12 +665,12 @@ class JudgeLLM:
 
         scores, messages, judgements = self.judge.evaluate_answer(questions, predictions, ref_answers)
         catigories = formatted_doc.specific['category']
-        try:
-            print('====scores:====', len(scores))
-            print('====questions=====', len(questions))
-            print('=====categories====', len(catigories))
-        except:
-            pass
+        # try:
+        #     print('====scores:====', len(scores))
+        #     print('====questions=====', len(questions))
+        #     print('=====categories====', len(catigories))
+        # except:
+        #     pass
         # try:
         #     pd.DataFrame(data={'questions': questions, 'categories': catigories, 'scores': scores}).to_csv('results_with_cat.csv', index=False)
         # except:

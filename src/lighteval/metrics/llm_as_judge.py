@@ -29,7 +29,7 @@ import time
 from typing import Optional
 import requests
 from openai import OpenAI
-
+import anthropic
 from lighteval.logging.hierarchical_logger import hlog_warn
 
 
@@ -129,9 +129,11 @@ class JudgeOpenAI:
         headers = {'api-key': openai_key, 'Content-Type': 'application/json'}
         url = openai_url
     
-        responses = []
+        # responses = []
+        judgments = []
+        scores = []
         for prompt in prompts:
-            for _ in range(self.API_MAX_RETRY):
+            for i in range(self.API_MAX_RETRY):
                 try:
                     payload = payload = {"temperature": self.temperature, "messages": prompt}
                     response = requests.post(url=url, headers=headers, json=payload)
@@ -143,22 +145,39 @@ class JudgeOpenAI:
                     #     max_tokens=self.max_tokens,
                     #     n=1,
                     # )
-                    responses.append(response)
+                    # responses.append(response)
+                    judgment = response.json()['choices'][0]['message']['content']
+                    judgments.append(judgment)
+                    scores.append(self.__process_judge_response(judgment))
                     break
                 except Exception as e:
+                    print('-----------response text, openai call failed ++++++++++++++++++++', response.text)
                     hlog_warn(f"{type(e), e}")
                     time.sleep(self.API_RETRY_SLEEP)
+                    anthropic_key = os.environ.get("ANTHROPIC_KEY", None)
+                    client = anthropic.Anthropic(api_key=anthropic_key)
+                    try:
+                        judgment = client.messages.create(model="claude-3-5-sonnet-20240620", system="You are a helpful assistant.", messages=[prompt], max_tokens=1000).to_dict()['content'][0]['text']
+                        judgments.append(judgment)
+                        scores.append(self.__process_judge_response(judgment))
+                        break
+                        
+                    except:
+                        if i >= self.API_MAX_RETRY - 1:
+                            print('claude failed too')
+                            scores.append(0)
+                            judgments.append('fail')
 
-        if len(responses) == 0:
-            raise Exception("Failed to get response from the API")
-        try:
+        # try:
 
-            judgments = [response.json()['choices'][0]['message']['content'] for response in responses]
-            scores = [self.__process_judge_response(judgment) for judgment in judgments]
-        except:
-            print('-----------response text, openai call failed ++++++++++++++++++++')
-            scores = ['0', '0']
-            judgments = ["none", 'none']
+            # judgments = [response.json()['choices'][0]['message']['content'] for response in responses]
+            # scores = [self.__process_judge_response(judgment) for judgment in judgments]
+            # print('this is judgement from llmas judge: ', judgments, len(judgments), type(judgments))
+            # print('thid is scores from llm as judge: ', scores, len(scores), type(scores))
+        # except Exception as e:
+        #     print('-----------response text, openai call failed ++++++++++++++++++++', str(e))
+        #     scores = ['1', '1']
+        #     judgments = ["none [[-1]]", 'none [[-1]]']
 
         return scores, prompts, judgments
 
