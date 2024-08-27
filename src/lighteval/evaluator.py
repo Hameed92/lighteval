@@ -125,6 +125,7 @@ def evaluate(  # noqa: C901
 
         # using a deep copy here because process results pops from the model responses
         metrics = task.process_results(doc, copy.deepcopy(model_responses))
+        print(metrics['user_prompt'][0])
         evaluation_tracker.metrics_logger.log(task_example_id.task_name, metrics)
         evaluation_tracker.details_logger.log(task_example_id.task_name, task, doc, model_responses, metrics)
         if "mt_bench" in cur_task_name:
