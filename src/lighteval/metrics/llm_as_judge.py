@@ -134,26 +134,28 @@ class JudgeOpenAI:
         scores = []
         for prompt in prompts:
             for i in range(self.API_MAX_RETRY):
-                try:
-                    payload = payload = {"temperature": self.temperature, "messages": prompt}
-                    response = requests.post(url=url, headers=headers, json=payload)
-                    # response = self.client.chat.completions.create(
-                    #     model=self.model,
-                    #     seed=self.seed,
-                    #     temperature=self.temperature,
-                    #     messages=prompt,
-                    #     max_tokens=self.max_tokens,
-                    #     n=1,
-                    # )
-                    # responses.append(response)
-                    judgment = response.json()['choices'][0]['message']['content']
-                    judgments.append(judgment)
-                    scores.append(self.__process_judge_response(judgment))
-                    break
-                except Exception as e:
-                    print('-----------response text, openai call failed ++++++++++++++++++++', response.text)
-                    hlog_warn(f"{type(e), e}")
-                    time.sleep(self.API_RETRY_SLEEP)
+                if openai_key:
+                    try:
+                        payload = payload = {"temperature": self.temperature, "messages": prompt}
+                        response = requests.post(url=url, headers=headers, json=payload)
+                        # response = self.client.chat.completions.create(
+                        #     model=self.model,
+                        #     seed=self.seed,
+                        #     temperature=self.temperature,
+                        #     messages=prompt,
+                        #     max_tokens=self.max_tokens,
+                        #     n=1,
+                        # )
+                        # responses.append(response)
+                        judgment = response.json()['choices'][0]['message']['content']
+                        judgments.append(judgment)
+                        scores.append(self.__process_judge_response(judgment))
+                        break
+                    except Exception as e:
+                        print('-----------response text, openai call failed ++++++++++++++++++++', response.text)
+                        hlog_warn(f"{type(e), e}")
+                        time.sleep(self.API_RETRY_SLEEP)
+                else:
                     anthropic_key = os.environ.get("ANTHROPIC_KEY", None)
                     client = anthropic.Anthropic(api_key=anthropic_key)
                     try:
