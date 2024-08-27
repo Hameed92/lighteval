@@ -91,7 +91,7 @@ class JudgeOpenAI:
         self.one_score_pattern = re.compile(r"\[\[(\d+\.?\d*)\]\]")
         self.one_score_pattern_backup = re.compile(r"\[(\d+\.?\d*)\]")
 
-        self.API_MAX_RETRY = 16
+        self.API_MAX_RETRY = 3
         self.API_RETRY_SLEEP = 10
         self.max_tokens = 2048
 
